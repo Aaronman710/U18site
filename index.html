@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>U18 SMPFC - Hommage Coupe Gambardella</title>
+  <style>
+    :root {
+      --principal: #0a3d62;
+      --secondaire: #1e3799;
+      --accent: #fbc531;
+      --texte: #ffffff;
+    }
+
+    * { margin:0; padding:0; box-sizing:border-box; font-family: "Segoe UI", Arial, sans-serif; }
+
+    body {
+      background: linear-gradient(135deg, var(--principal), var(--secondaire));
+      color: var(--texte);
+    }
+
+    header { text-align:center; padding:30px 20px; }
+
+    .logo {
+      width: 120px;
+      margin: 10px auto;
+    }
+
+    nav {
+      display:flex;
+      justify-content:center;
+      gap:15px;
+      margin-top:20px;
+      flex-wrap:wrap;
+    }
+
+    nav button {
+      background:transparent;
+      border:2px solid var(--accent);
+      color:var(--texte);
+      padding:10px 18px;
+      border-radius:30px;
+      cursor:pointer;
+      transition:0.3s;
+    }
+
+    nav button:hover, nav button.active {
+      background:var(--accent);
+      color:#000;
+    }
+
+    .container { max-width:1100px; margin:auto; padding:30px 20px; }
+
+    .section { display:none; animation:fade 0.5s ease; }
+    .section.active { display:block; }
+
+    @keyframes fade {
+      from { opacity:0; transform:translateY(10px);} 
+      to { opacity:1; transform:translateY(0);} 
+    }
+
+    h2 { margin-bottom:15px; color:var(--accent); }
+
+    .cards {
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      gap:20px;
+    }
+
+    .card {
+      background:rgba(255,255,255,0.08);
+      border-radius:16px;
+      padding:20px;
+    }
+
+    .player-detail {
+      background:rgba(0,0,0,0.3);
+      border-radius:16px;
+      padding:20px;
+      margin-bottom:20px;
+      display:flex;
+      gap:15px;
+      align-items:center;
+    }
+
+    .galerie {
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+      gap:15px;
+    }
+
+    .galerie img {
+      width:100%;
+      max-width: 220px;
+      border-radius:15px;
+    }
+
+    footer {
+      text-align:center;
+      padding:25px;
+      margin-top:40px;
+      background:rgba(0,0,0,0.2);
+    }
+   /* Photo de profil = ronde */
+    .photo-profil {
+      width: 90px;
+      height: 90px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 3px solid var(--accent);
+    }
+
+   /* Photo choisie = rectangle */
+    .photo-speciale-V1 {
+      width: 140px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 3px dashed var(--accent);
+      margin-top: 8px;
+    }
+
+    .photo-speciale-V2 {
+      width: 100px;
+      height: 140px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 3px dashed var(--accent);
+      margin-top: 8px;
+    }
+
+   /* Organisation des deux photos */
+    .player-photos {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .match-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .match-card {
+      background:rgba(255,255,255,0.1);
+      border-radius: 15px;
+      padding: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      transition: 0.3s;
+      width: 100%;
+      height: 80px;
+      max-width: 900px;
+      margin: 0 auto;
+      margin-bottom: 15px;
+    }
+
+    .match-card:hover {
+      transform: scale(1.03);
+      background: rgba(255,255,255,0.18);
+    }
+
+    .team {
+      display: flex;
+      align-items: center;
+      gap: 30px;
+      font-weight: bold;
+      white-space: nowrap;
+    }
+
+    .team img {
+      width: 40px;
+      height: 40px;
+      object-fit: contain;
+    }
+
+    .score {
+      font-size: 22px;
+      font-weight: bold;
+      color: var(--accent);
+      width: 120px;
+      text-align: center;
+    }
+
+    .match-detail {
+      display: none;
+      background: rgba(0,0,0,0.4);
+      padding: 20px;
+      border-radius: 16px;
+      margin-top: 20px;
+    }
+
+    .match-detail button {
+      margin-top: 15px;
+      background: var(--accent);
+      border: none;
+      padding: 10px 15px;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    .match-container {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      align-items: center;
+    }
+
+    @media screen and (max-width: 768px) {
+      .match-card {
+        max-width: 95%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <!-- LOGO DU CLUB -->
+  <img src="images/logo_smpfc.png" alt="Logo SMPFC" class="logo">
+  <h1>U18 SMPFC</h1>
+  <p>Hommage au parcours exceptionnel en Coupe Nationale ⚽🏆</p>
+
+  <nav>
+    <button class="active" onclick="showSection('accueil')">Accueil</button>
+    <button onclick="showSection('joueurs')">Joueurs</button>
+    <button onclick="showSection('galerie')">Galerie</button>
+    <button onclick="showSection('stats')">Statistiques</button>
+  </nav>
+</header>
+
+<div class="container">
+
+<!-- ACCUEIL -->
+<div class="match-card" onclick="openMatch('match1')">
+<div class="team left">
+<img src="images/logo_smpfc.png" alt="SMPFC">
+<span>SMPFC</span>
+</div>
+
+
+<div class="score">0 (5) - (4) 0</div>
+
+
+<div class="team right">
+<img src="images/ubcc.png" alt="UBCC">
+<span>UBCC</span>
+</div>
+</div>
+</div>
+
+
+<div id="match1" class="match-detail">
+<h3>Feuille de match - SMPFC vs UBCC</h3>
+<p><strong>Compétition :</strong> Coupe Gambardella</p>
+<p><strong>Stade :</strong> Stade du Champoulain</p>
+
+
+<h4>Feuille de match</h4>
+<div class="galerie">
+<img src="images/match1.PNG">
+</div>
+
+
+<button onclick="closeMatch('match1')">Fermer</button>
+</div>
+</section>
+
+<div class="match-card" onclick="openMatch('match2')">
+<div class="team left">
+<img src="images/logo_smpfc.png" alt="SMPFC">
+<span>SMPFC</span>
+</div>
+
+
+<div class="score">2 - 1</div>
+
+
+<div class="team right">
+<img src="images/logo-groupement-de-jeunes-vie-marais (1).jpg" alt="GJ Ndriez Vie et Marais">
+<span>GJ Ndriez Vie et Marais</span>
+</div>
+</div>
+</div>
+
+
+<div id="match2" class="match-detail">
+<h3>Feuille de match - SMPFC vs GJ Ndriez Vie et Marais</h3>
+<p><strong>Compétition :</strong> Coupe Gambardella</p>
+<p><strong>Stade :</strong> Stade Eloi Menelec</p>
+<p><strong>Buteurs :</strong> Badis Hartane (45'+2), Elyes El Kammouni (58')</p>
+
+
+<h4>Feuille de match</h4>
+<div class="galerie">
+<img src="images/match2.PNG">
+</div>
+
+
+<button onclick="closeMatch('match2')">Fermer</button>
+</div>
+</section>
+
+<div class="match-card" onclick="openMatch('match3')">
+<div class="team">
+<img src="images/bouguenais.jpg" alt="Bouguenais">
+<span>SMPFC</span>
+</div>
+
+
+<div class="score">2 (3) - (4) 2</div>
+
+
+<div class="team">
+<img src="images/logo_smpfc.png" alt="SMPFC">
+<span>SMPFC</span>
+</div>
+</div>
+</div>
+
+
+
+<div id="match3" class="match-detail">
+<h3>Feuille de match - SMPFC vs Bouguenais </h3>
+<p><strong>Compétition :</strong> Coupe Gambardella</p>
+<p><strong>Stade :</strong> Stade Eloi Menelec</p>
+<p><strong>Buteurs :</strong> Elyes El Kammouni (7'),Badis Hartane (90'+3)</p>
+
+
+<h4>Feuille de match</h4>
+<div class="galerie">
+<img src="images/match3.PNG">
+</div>
+
+
+<button onclick="closeMatch('match3')">Fermer</button>
+</div>
+</section>
+
+<div class="match-card" onclick="openMatch('match4')">
+<div class="team">
+<img src="images/logo_smpfc.png" alt="SMPFC">
+<span>SMPFC</span>
+</div>
+
+
+<div class="score">3 - 2</div>
+
+
+<div class="team">
+<img src="images/lionstmartin.webp" alt="GJ Lion st Martin">
+<span>GJ Lion st Martin</span>
+</div>
+</div>
+</div>
+
+
+<div id="match4" class="match-detail">
+<h3>Feuille de match - SMPFC vs GJ Lion st Martin</h3>
+<p><strong>Compétition :</strong> Coupe Gambardella</p>
+<p><strong>Stade :</strong> Stade Eloi Menelec</p>
+<p><strong>Buteurs :</strong> Badis Hartane (65'), Elyes El Kammouni (90'+4), Badis Hartane (90'+6)</p>
+
+
+<h4>Feuille de match</h4>
+<div class="galerie">
+<img src="images/match4.jpg">
+</div>
+
+
+<button onclick="closeMatch('match4')">Fermer</button>
+</div>
+</section>
+
+<div class="match-card" onclick="openMatch('match5')">
+<div class="team">
+<img src="images/logo_smpfc.png" alt="SMPFC">
+<span>SMPFC</span>
+</div>
+
+
+<div class="score">2 - 4</div>
+
+
+<div class="team">
+<img src="images/coteaux.png" alt="FC Coteaux du Vignoble">
+<span>FC Coteaux du Vignoble</span>
+</div>
+</div>
+</div>
+
+
+<div id="match5" class="match-detail">
+<h3>Feuille de match - SMPFC vs FC Coteaux du Vignoble</h3>
+<p><strong>Compétition :</strong> Coupe Gambardella</p>
+<p><strong>Stade :</strong> Stade Eloi Menelec</p>
+<p><strong>Buteurs :</strong> Zacharie Rogoue(54'), Badis Hartane (75')</p>
+
+
+<h4>Feuille de match</h4>
+<div class="galerie">
+<img src="images/match5.PNG">
+</div>
+
+
+<button onclick="closeMatch('match5')">Fermer</button>
+</div>
+</section>
+  <!-- JOUEURS -->
+  <section id="joueurs" class="section">
+    <h2>Fiches détaillées des joueurs</h2>
+
+    <div class="player-detail">
+     <div class="player-photos">
+       <img src="images/joueur1.jpg" class="photo-profil" alt="Axel Normand">
+       <img src="images/joueur2_style.JPG" alt="Photos choisie par Axel Normand" class="photo-speciale-V1">
+     </div>
+     <div>
+        <h3>#1 - Mateo Vergnaud (Gardien)</h3>
+        Matchs : 5
+      </div>
+      <div class="player-qa">
+  <p><strong>Q :</strong> Ton meilleur souvenir en coupe ?<br>
+  <strong>R :</strong> La victoire 3-2 contre Lion st martin avec tout les supporters</p>
+
+  <p><strong>Q :</strong> Quel est ton meilleur match ?<br>
+  <strong>R :</strong> contre Bouguenais ou je fait plusieurs arret nottament au tir au but.</p>
+
+  <p><strong>Q :</strong> une anecdote sur ces jour de match de coupe ?<br>
+  <strong>R :</strong> la semaine avant le match a Bouguenais, je suis partie 1 semaine en vacances, j'ai que manger et j'avais la flemme de jouer au debut.</p>
+</div>
+    </div>
+
+    <div class="player-detail">
+     <div class="player-photos">
+       <img src="images/joueur2.JPG" class="photo-profil" alt="Axel Normand">
+       <img src="images/joueur1_style.JPG" alt="Photos choisie par Axel Normand" class="photo-speciale-V2">
+     </div>
+     <div>
+        <h3>#2 - Tim-Hoan Villeneuve (Defenseur droit)</h3>
+        Matchs : 5
+      </div>
+      <div class="player-qa">
+  <p><strong>Q :</strong> Ton meilleur souvenir en coupe ?<br>
+  <strong>R :</strong> Quand on a marque deux buts a la derniere minutes contre saint martin</p>
+
+  <p><strong>Q :</strong> Quel est ton meilleur match ?<br>
+  <strong>R :</strong> contre saint martin</p>
+
+  <p><strong>Q :</strong> Une anecdote sur ces jours de match de coupe ?<br>
+  <strong>R :</strong> Quand on a surpris Djibril feter la victoire contre bouguenais a la creperie</p>
+</div>
+    </div>
+
+    <div class="player-detail">
+     <div class="player-photos">
+       <img src="images/joueur3.JPG" class="photo-profil" alt="Maxime Tartrau">
+       <img src="images/joueur3_style.JPG" alt="Photos choisie par Maxime Tartrau" class="photo-speciale-V2">
+     </div>
+     <div>
+        <h3>#3 - Maxime Tartrau (Defenseur gauche)</h3>
+        Matchs : 5
+      </div>
+      <div class="player-qa">
+  <p><strong>Q :</strong> Ton meilleur souvenir en coupe ?<br>
+  <strong>R :</strong> la victoire contre bouguenais avec la remontada.</p>
+
+  <p><strong>Q :</strong> Quel est ton meilleur match ?<br>
+  <strong>R :</strong> 5e tour</p>
+
+  <p><strong>Q :</strong> Une anecdote sur ces jours de match de coupe ?<br>
+  <strong>R :</strong> j'en ai pas sorry</p>
+</div>
+    </div>
+
+    <div class="player-detail">
+     <div class="player-photos">
+       <img src="images/joueur4.JPG" class="photo-profil" alt="Axel Normand">
+       <img src="images/joueur4_style.jpg" alt="Photos choisie par Axel Normand" class="photo-speciale-V2">
+     </div>
+     <div>
+    <h3>#4 - Axel Normand (Defenseur central)</h3>
+        Matchs : 4 
+</div>
+    <div class="player-qa">
+  <p><strong>Q :</strong> Ton meilleur souvenir en coupe ?<br>
+  <strong>R :</strong> La Remontada contre Bouguenais.</p>
+
+  <p><strong>Q :</strong> Quel est ton meilleur match ?<br>
+  <strong>R :</strong> La finale Regionale</p>
+
+  <p><strong>Q :</strong> Une anecdote sur ces jours de match de coupe ?<br>
+  <strong>R :</strong> Quand il y'a victoire en coupe on fait la fête.</p>
+</div>
+
+    </div>
+
+    <div class="player-detail">
+     <div class="player-photos">
+       <img src="images/joueur5.JPG" class="photo-profil" alt="Axel Normand">
+       <img src="images/joueur5_style.jpg" alt="Photos choisie par Axel Normand" class="photo-speciale-V2">
+     </div>
+     <div>
+    <h3>#5 - Nolann Ledreff (Defenseur gauche)</h3>
+        Matchs : 5 
+</div>
+    <div class="player-qa">
+  <p><strong>Q :</strong> Ton meilleur souvenir en coupe ?<br>
+  <strong>R :</strong> Le dernier peno contre Campbon. </p>
+
+  <p><strong>Q :</strong> Quel est ton meilleur match ?<br>
+  <strong>R :</strong> St martin</p>
+
+  <p><strong>Q :</strong> Une anecdote sur ces jours de match de coupe ?<br>
+  <strong>R :</strong> Simon s'est enquille un gros Mr et Mme B bien gras 1h avant le match.</p>
+</div>
+
+    </div>
+
+    <div class="player-detail">
+     <div class="player-photos">
+       <img src="images/joueur6.JPG" class="photo-profil" alt="Axel Normand">
+       <img src="images/joueur6_style.jpg" alt="Photos choisie par Axel Normand" class="photo-speciale-V2">
+     </div>
+     <div>
+        <h3>#6 - Simon Jimenez (Defenseur central)</h3>
+        Matchs : 5 
+      </div>
+      <div class="player-qa">
+  <p><strong>Q :</strong> Ton meilleur souvenir en coupe ?<br>
+  <strong>R :</strong> La Remontada contre Lion st martin</p>
+
+  <p><strong>Q :</strong> Quel est ton meilleur match ?<br>
+  <strong>R :</strong> je dirait que suis regulier. (le mec humble)</p>
+
+  <p><strong>Q :</strong> Une anecdote sur ces jours de match de coupe ?<br>
+  <strong>R :</strong> Apres la finale regionale on est allee au grec pour se consoler.</p>
+</div>
+
+    </div>
+
+    <div class="player-detail">
+     <div class="player-photos">
+       <img src="images/joueur7.JPG" class="photo-profil" alt="Axel Normand">
+       <img src="images/photo2.JPG" alt="Photos choisie par Axel Normand" class="photo-speciale-V1">
+     </div>
+     <div>
+        <h3>#7 - Elyes El Kammouni (ailier gauche)</h3>
+        Matchs : 5 
+      </div>
+      <div class="player-qa">
+  <p><strong>Q :</strong> Ton meilleur souvenir en coupe ?<br>
+  <strong>R :</strong> Ce weekend avec tout le monde qui avait c'etait incroyable.</p>
+
+  <p><strong>Q :</strong> Quel est ton meilleur match ?<br>
+  <strong>R :</strong> Contre GJ lion st martin</p>
+
+  <p><strong>Q :</strong> Une anecdote sur ces jours de match de coupe ?<br>
+  <strong>R :</strong> les pizzas a l'entrainement</p>
+</div>
+
+    </div>
+
+    <div class="player-detail">
+     <div class="player-photos">
+       <img src="images/joueur8.JPG" class="photo-profil" alt="Axel Normand">
+       <img src="images/joueur8_style.JPG" alt="Photos choisie par Axel Normand" class="photo-speciale-V1">
+     </div>
+     <div>
+        <h3>#8 - Albin Paillat (Milieu central)</h3>
+        Matchs : 5
+      </div>
+      <div class="player-qa">
+  <p><strong>Q :</strong> Ton meilleur souvenir en coupe ?<br>
+  <strong>R :</strong> Le 4e tour.</p>
+
+  <p><strong>Q :</strong> Quel est ton meilleur match ?<br>
+  <strong>R :</strong> Vie et Marais.</p>
+
+  <p><strong>Q :</strong> Une anecdote sur ces jours de match de coupe ?<br>
+  <strong>R :</strong> J'en ai pas</p>
+</div>
+
+    </div>
+
+    <div class="player-detail">
+     <div class="player-photos">
+       <img src="images/joueur9.JPG" class="photo-profil" alt="Axel Normand">
+       <img src="images/photo2.JPG" alt="Photos choisie par Axel Normand" class="photo-speciale-V1">
+     </div>
+     <div>
+        <h3>#9 - Victor Menardais (Milieu offensif)</h3>
+        Matchs : 5 
+      </div>
+      <div class="player-qa">
+  <p><strong>Q :</strong> Ton meilleur souvenir en coupe ?<br>
+  <strong>R :</strong> La finale regionale quand je suis rentrer et que j'ai vu le monde</p>
+
+  <p><strong>Q :</strong> Quel est ton meilleur match ?<br>
+  <strong>R :</strong> Riez vie et marais.</p>
+
+  <p><strong>Q :</strong> Une anecdote sur ces jours de match de coupe ?<br>
+  <strong>R :</strong> simon qui mange mr et mme B avant le match et Zach qui demande ce qu'on a manger le midi</p>
+</div>
+
+    </div>
+
+    <div class="player-detail">
+     <div class="player-photos">
+       <img src="images/joueur10.JPG" class="photo-profil" alt="Axel Normand">
+       <img src="images/joueur10_style.JPG" alt="Photos choisie par Axel Normand" class="photo-speciale-V1">
+     </div>
+     <div>
+        <h3>#10 - Badis Hartane (Avant centre)</h3>
+        Matchs : 4 
+      </div>
+      <div class="player-qa">
+  <p><strong>Q :</strong> Ton meilleur souvenir en coupe ?<br>
+  <strong>R :</strong> Mon but contre saint martin</p>
+
+  <p><strong>Q :</strong> Quel est ton meilleur match ?<br>
+  <strong>R :</strong> Contre Bouguenais</p>
+
+  <p><strong>Q :</strong> Une anecdote sur ces jours de match de coupe ?<br>
+  <strong>R :</strong> j'ai le seum de pas avoir pu celebrer contre Coteaux du Vignoble</p>
+</div>
+
+    </div>
+
+    <div class="player-detail">
+     <div class="player-photos">
+       <img src="images/joueur11.jpg" class="photo-profil" alt="Axel Normand">
+       <img src="images/joueur11_style.jpg" alt="Photos choisie par Axel Normand" class="photo-speciale-V2">
+     </div>
+     <div>
+        <h3>#11 - Lucas Marchadier (ailier droit)</h3>
+        Matchs : 3 
+      </div>
+      <div class="player-qa">
+  <p><strong>Q :</strong> Ton meilleur souvenir en coupe ?<br>
+  <strong>R :</strong> 2-2 puis 3-2 contre lion st martin</p>
+
+  <p><strong>Q :</strong> Quel est ton meilleur match ?<br>
+  <strong>R :</strong> bouguenais</p>
+
+  <p><strong>Q :</strong> Une anecdote sur ces jours de match de coupe ?<br>
+  <strong>R :</strong> j'en ai pas sorry</p>
+</div>
+
+    </div>
+
+    <div class="player-detail">
+     <div class="player-photos">
+       <img src="images/joueur12.JPG" class="photo-profil" alt="Axel Normand">
+       <img src="images/joueur12_style.jpg" alt="Photos choisie par Axel Normand" class="photo-speciale-V2">
+     </div>
+     <div>
+        <h3>#12 - Zacharie Rogoue (Milieu offensif)</h3>
+        Matchs : 5 
+      </div>
+      <div class="player-qa">
+  <p><strong>Q :</strong> Ton meilleur souvenir en coupe ?<br>
+  <strong>R :</strong> La remontada contre St martin</p>
+
+  <p><strong>Q :</strong> Quel est ton meilleur match ?<br>
+  <strong>R :</strong> la finale regionale pour les sensations</p>
+
+  <p><strong>Q :</strong> Une anecdote sur ces jours de match de coupe ?<br>
+  <strong>R :</strong> Simon qui vient a un match apres avoir mange monsieur et madame B le midi (c'est pas pro)</p>
+</div>
+
+    </div>
+
+    <div class="player-detail">
+     <div class="player-photos">
+       <img src="images/joueur13.JPG" class="photo-profil" alt="Axel Normand">
+       <img src="images/joueur13_style.jpg" alt="Photos choisie par Axel Normand" class="photo-speciale-V1">
+     </div>
+     <div>
+        <h3>#13 - Yanis Miraoui (Milieu central)</h3>
+        Matchs : 4 
+      </div>
+      <div class="player-qa">
+  <p><strong>Q :</strong> Ton meilleur souvenir en coupe ?<br>
+  <strong>R :</strong> La fin contre St Martin. </p>
+
+  <p><strong>Q :</strong> Quel est ton meilleur match ?<br>
+  <strong>R :</strong> Contre Bouguenais.</p>
+
+  <p><strong>Q :</strong> Une anecdote sur ces jours de match de coupe ?<br>
+  <strong>R :</strong> J'ai pas</p>
+</div>
+
+    </div>
+
+    <div class="player-detail">
+     <div class="player-photos">
+       <img src="images/joueur14.jpg" class="photo-profil" alt="Axel Normand">
+       <img src="images/photo2.JPG" alt="Photos choisie par Axel Normand" class="photo-speciale-V1">
+     </div>
+     <div>
+        <h3>#14 - Ewen Rio (Defenseur gauche)</h3>
+        Matchs : 3 
+      </div>
+      <div class="player-qa">
+  <p><strong>Q :</strong> Ton meilleur souvenir en coupe ?<br>
+  <strong>R :</strong> Les deux derniers buts a la fin du match contre st Martin</p>
+
+  <p><strong>Q :</strong> Quel est ton meilleur match ?<br>
+  <strong>R :</strong> Vie et Marais</p>
+
+  <p><strong>Q :</strong> Une anecdote sur ces jours de match de coupe ?<br>
+  <strong>R :</strong> J'ai pas d'anecdote. </p>
+</div>
+
+    </div>
+
+    <div class="player-detail">
+     <div class="player-photos">
+       <img src="images/joueur15.JPG" class="photo-profil" alt="Axel Normand">
+       <img src="images/joueur15_style.jpg" alt="Photos choisie par Axel Normand" class="photo-speciale-V2">
+     </div>
+     <div>
+        <h3>#15 - Leis Robion (Gardien)</h3>
+        Matchs : 4 
+      </div>
+      <div class="player-qa">
+  <p><strong>Q :</strong> Ton meilleur souvenir en coupe ?<br>
+  <strong>R :</strong> Contre Lion st martin le but a la derniere minute quand on a tous celebrer</p>
+
+  <p><strong>Q :</strong> Quel est ton meilleur match ?<br>
+  <strong>R :</strong> j'ai pas joue mais on a tape campbon c'etait magnifique</p>
+
+  <p><strong>Q :</strong> Une anecdote sur ces jours de match de coupe ?<br>
+  <strong>R :</strong> Zach qui demande a tout le monde on a manger quoi le midi.</p>
+</div>
+
+    </div>
+
+    <div class="player-detail">
+     <div class="player-photos">
+       <img src="images/joueur16.JPG" class="photo-profil" alt="Axel Normand">
+       <img src="images/joueur16_style.jpg" alt="Photos choisie par Axel Normand" class="photo-speciale-V1">
+     </div>
+     <div>
+        <h3>#16 - Nathan Rolais (Defenseur gauche)</h3>
+        Matchs : 2 
+      </div>
+      <div class="player-qa">
+  <p><strong>Q :</strong> Ton meilleur souvenir en coupe ?<br>
+  <strong>R :</strong> La remontada contre saint martin</p>
+
+  <p><strong>Q :</strong> Quel est ton meilleur match ?<br>
+  <strong>R :</strong> Contre Bouguenais</p>
+
+  <p><strong>Q :</strong> Une anecdote sur ces jours de match de coupe ?<br>
+  <strong>R :</strong> j'en ai pas perso</p>
+</div>
+
+    </div>
+
+    <div class="player-detail">
+     <div class="player-photos">
+       <img src="images/joueur17.jpg" class="photo-profil" alt="Axel Normand">
+       <img src="images/joueur17_style.jpg" alt="Photos choisie par Axel Normand" class="photo-speciale-V2">
+     </div>
+     <div>
+        <h3>#17 - Hugo Lechat (Milieu central)</h3>
+        Matchs : 2 
+      </div>
+      <div class="player-qa">
+  <p><strong>Q :</strong> Ton meilleur souvenir en coupe ?<br>
+  <strong>R :</strong> La victoire contre Campbon</p>
+
+  <p><strong>Q :</strong> Quel est ton meilleur match ?<br>
+  <strong>R :</strong> Ndriez Vie et Marais.</p>
+
+  <p><strong>Q :</strong> Une anecdote sur ces jours de match de coupe ?<br>
+  <strong>R :</strong> Djibril a mit une patate dans la cahute des remplacant contre Campbon.</p>
+</div>
+
+    </div>
+
+    <div class="player-detail">
+      <img src="images/joueur18.JPG" class="photo-profil" alt="Eliott Rabineau">
+      <div>
+        <h3>#18 - Eliott Rabineau (Milieu offensif)</h3>
+        Matchs : 1 
+</div>
+
+    </div>
+
+    <div class="player-detail">
+      <img src="images/joueur19.JPG" class="photo-profil" alt="Lucas DaSilva">
+      <div>
+        <h3>#19 - Lucas DaSilva (Avant centre)</h3>
+        Matchs : 1
+    </div>
+</div>
+
+    </div>
+
+  </section>
+
+  <!-- GALERIE -->
+  <section id="galerie" class="section">
+    <h2>Galerie Photos</h2>
+    <div class="galerie">
+      <img src="images/photo1.JPG" alt="Match 1">
+      <img src="images/photo2.JPG" alt="Victoire">
+      <img src="images/photo3.jpg" alt="Équipe">
+      <img src="images/photo4.JPG" alt="Supporters">
+    </div>
+  </section>
+
+  <!-- STATISTIQUES -->
+  <section id="stats" class="section">
+    <h2>Statistiques générales</h2>
+    <div class="cards">
+      <div class="card">⚽ Buts marqués : 9</div>
+      <div class="card">🛡️ Buts encaissés : 9</div>
+      <div class="card">🏃 Matchs joués : 5</div>
+      <div class="card">✅ Victoires : 4</div>
+    </div>
+
+    <h2 style="margin-top:30px;">🏆 Classement des buteurs</h2>
+    <div class="cards">
+      <div class="card">1. Badis Hartane - 5 buts</div>
+      <div class="card">2. Elyes El Kammouni - 3 buts</div>
+      <div class="card">3. Zacharie Rogoue - 1 buts</div>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  <p>© 2025 SMPFC U18 - Site hommage officiel</p>
+</footer>
+
+<script>
+  function showSection(id) {
+    document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+
+    document.querySelectorAll('nav button').forEach(btn => btn.classList.remove('active'));
+    event.target.classList.add('active');
+  }
+
+  function openMatch(id) {
+    document.getElementById(id).style.display = 'block';
+  }
+
+  function closeMatch(id) {
+    document.getElementById(id).style.display = 'none';
+    document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+
+    document.querySelectorAll('nav button').forEach(btn => btn.classList.remove('active'));
+    event.target.classList.add('active');
+  }
+</script>
+
+</body>
+</html>
